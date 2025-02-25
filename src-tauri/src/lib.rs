@@ -19,7 +19,9 @@ mod commands {
                 return format!("Could not read file '{path}': {e}");
             }
         };
-        let html = comrak::markdown_to_html(&markdown, &comrak::Options::default());
+        let mut html = String::new();
+        let parser = pulldown_cmark::Parser::new(&markdown);
+        pulldown_cmark::html::push_html(&mut html, parser);
         html
     }
 }

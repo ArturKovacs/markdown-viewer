@@ -2,6 +2,7 @@ import { createSignal, onMount, Show } from "solid-js";
 
 import { invoke } from "@tauri-apps/api/core";
 import "./App.css";
+import "./markdown.css";
 
 function App() {
   const [filePath, setFilePath] = createSignal<string | null>(null);

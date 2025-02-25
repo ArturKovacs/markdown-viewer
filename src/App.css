@@ -41,33 +41,6 @@ h1 {
   text-align: center;
 }
 
-.markdown-content ol p,
-.markdown-content ul p {
-  margin-block-start: 0;
-  margin-block-end: 0;
-}
-
-.markdown-content code {
-  background-color: var(--code-bg);
-  border: 1px solid var(--code-border);
-  border-radius: 4px;
-  padding: 2px;
-  font-family: monospace;
-  font-size: 14px;
-}
-
-.markdown-content pre code {
-  border: unset;
-  background-color: unset;
-}
-
-.markdown-content pre {
-  padding: 5px;
-  background-color: var(--code-bg);
-  border-radius: 5px;
-  border: 1px solid var(--code-border);
-}
-
 @media (prefers-color-scheme: dark) {
   :root {
     color: #f6f6f6;
