@@ -1,6 +1,6 @@
 
 .markdown-content {
-  max-width: 50em;
+  max-width: calc(min(50em, 100%));
 }
 
 .markdown-content ol p,
@@ -10,8 +10,8 @@
 }
 
 .markdown-content code {
-  background-color: var(--code-bg);
-  border: 1px solid var(--code-border);
+  background-color: var(--light-bg-contrast);
+  border: 1px solid var(--strong-bg-contrast);
   border-radius: 4px;
   padding: 2px;
   font-family: monospace;
@@ -23,9 +23,41 @@
   background-color: unset;
 }
 
+/* Select the pre elements that have a code child */
+.markdown-content pre:has(> code) {
+  overflow-x: scroll;
+}
+
 .markdown-content pre {
   padding: 5px;
-  background-color: var(--code-bg);
+  background-color: var(--light-bg-contrast);
   border-radius: 5px;
-  border: 1px solid var(--code-border);
+  border: 1px solid var(--strong-bg-contrast);
+}
+
+.markdown-content thead tr {
+  border-bottom: 1px solid rgb(176, 176, 176);
+}
+
+.markdown-content table th,
+.markdown-content table td {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.markdown-content table tr {
+  background-color: none;
+}
+
+/* Apply background color to even rows */
+.markdown-content table tr:nth-child(even) {
+  background-color: var(--light-bg-contrast);
+}
+
+.markdown-content table td {
+  vertical-align: top;
+}
+
+.markdown-content table {
+  border-collapse: collapse;
 }

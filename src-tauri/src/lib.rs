@@ -30,14 +30,16 @@ mod commands {
     // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
     #[tauri::command]
     pub fn get_file_path() -> String {
-        super::get_file_path().map(|p| p.to_str().unwrap().to_owned()).unwrap_or_default()
+        super::get_file_path()
+            .map(|p| p.to_str().unwrap().to_owned())
+            .unwrap_or_default()
     }
 
     #[tauri::command]
     pub async fn get_content_html() -> Result<String, String> {
         let path = match super::get_file_path() {
             Some(p) => p,
-            None => return Err(format!("No file selected."))
+            None => return Err(format!("No file selected.")),
         };
         let markdown = match std::fs::read_to_string(&path) {
             Ok(markdown) => markdown,
@@ -46,7 +48,8 @@ mod commands {
             }
         };
         let mut html = String::new();
-        let parser = pulldown_cmark::Parser::new(&markdown);
+        let options = pulldown_cmark::Options::ENABLE_TABLES;
+        let parser = pulldown_cmark::Parser::new_ext(&markdown, options);
         pulldown_cmark::html::push_html(&mut html, parser);
         Ok(html)
     }
@@ -55,6 +58,7 @@ mod commands {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             commands::get_content_html,

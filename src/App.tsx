@@ -1,6 +1,7 @@
 import { createSignal, onCleanup, onMount, Show } from "solid-js";
 
 import { invoke } from "@tauri-apps/api/core";
+import { exit } from '@tauri-apps/plugin-process';
 import "./App.css";
 import "./markdown.css";
 
@@ -20,7 +21,12 @@ function App() {
   const [contentHtml, setContentHtml] = createSignal<string | null>(null);
   const [errorMessage, setErrorMessage] = createSignal<string | null>(null);
 
-  const handleZoomKey = (event: KeyboardEvent) => {
+  const handleKeydown = async (event: KeyboardEvent) => {
+    if (event.key == "Escape") {
+      await exit(0);
+      return;
+    }
+
     if (event.ctrlKey) {
       if (event.key === '=') {
         setZoom(getZoom() * ZOOM_DELTA);
@@ -32,7 +38,7 @@ function App() {
 
   onMount(async () => {
     setZoom(1);
-    document.addEventListener("keydown", handleZoomKey);
+    document.addEventListener("keydown", handleKeydown);
 
     setFilePath(await invoke("get_file_path"));
     invoke("get_content_html").then(html => {
@@ -43,7 +49,7 @@ function App() {
   });
 
   onCleanup(() => {
-    document.removeEventListener("keydown", handleZoomKey);
+    document.removeEventListener("keydown", handleKeydown);
   });
 
   return (
