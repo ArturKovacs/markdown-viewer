@@ -17,7 +17,6 @@ function getZoom(): number {
 const ZOOM_DELTA = 1.1;
 
 function App() {
-  const [filePath, setFilePath] = createSignal<string | null>(null);
   const [contentHtml, setContentHtml] = createSignal<string | null>(null);
   const [errorMessage, setErrorMessage] = createSignal<string | null>(null);
 
@@ -40,7 +39,6 @@ function App() {
     setZoom(1);
     document.addEventListener("keydown", handleKeydown);
 
-    setFilePath(await invoke("get_file_path"));
     invoke("get_content_html").then(html => {
       setContentHtml(html as string);
     }).catch(err => {
@@ -54,10 +52,6 @@ function App() {
 
   return (
     <main class="container">
-      <div>
-        {filePath()}
-      </div>
-
       <Show when={errorMessage() != null}>
         <div>
           {errorMessage()}

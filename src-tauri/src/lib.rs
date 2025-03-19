@@ -1,5 +1,7 @@
 use std::path::PathBuf;
 
+use tauri::Manager;
+
 fn get_file_path() -> Option<PathBuf> {
     let mut files = Vec::new();
 
@@ -64,6 +66,21 @@ pub fn run() {
             commands::get_content_html,
             commands::get_file_path
         ])
+        .setup(|app| {
+            let file_path = get_file_path();
+            let title = match file_path {
+                Some(path) => {
+                    let last_components = path.components().rev().take(2).collect::<Vec<_>>();
+                    let path = last_components.into_iter().rev().collect::<PathBuf>();
+                    path.to_string_lossy().into_owned()
+                }
+                None => String::from("Open a Markdown file from the file browser")
+            };
+            for window in app.webview_windows().values() {
+                let _ = window.set_title(&title);
+            }
+            Ok(())
+        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
